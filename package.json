@@ -1,0 +1,16 @@
+{
+  "name": "make-jxl-data",
+  "version": "0.0.1",
+  "description": "Turns US[FM][X] into JXL JSON",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Howe",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "proskomma-core": "^0.10.1",
+    "proskomma-json-tools": "^0.7.1"
+  }
+}
