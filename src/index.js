@@ -68,9 +68,13 @@ const actions = {
             description: "End verses",
             test: () => true,
             action: ({workspace, output}) => {
+                workspace.currentSentence
+                    .filter(w => !w.occurrences)
+                    .forEach(w => w.occurrences = workspace.occurrences[w.lemma])
                 output.sentences
+                    .map(s => s[0].source)
                     .forEach(
-                        s => s.filter(w => !w.occurences)
+                        s => s.filter(w => !w.occurrences)
                             .forEach(w => w.occurrences = workspace.occurrences[w.lemma])
                     );
                 workspace.verses = null;
@@ -109,7 +113,14 @@ const actions = {
                     element.text.includes('!')
                 ) {
                     if (workspace.currentSentence.length > 0) {
-                        output.sentences.push(workspace.currentSentence);
+                        output.sentences.push(
+                            [
+                                {
+                                    source: workspace.currentSentence,
+                                    gloss: ""
+                                }
+                            ]
+                        );
                         workspace.currentSentence = [];
                     }
                 } else if (
@@ -140,7 +151,8 @@ const actions = {
         {
             description: "Postprocess sentences",
             test: () => true,
-            action: () => {}
+            action: () => {
+            }
         }
     ]
 };
