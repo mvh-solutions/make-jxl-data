@@ -30,7 +30,8 @@ const actions = {
                 workspace.currentAtts = null;
                 workspace.chapter = null;
                 workspace.verses = null;
-                workspace.occurrences = {}
+                workspace.occurrences = {};
+                workspace.currentSentenceString = "";
             }
         }
     ],
@@ -100,7 +101,7 @@ const actions = {
     ],
     endWrapper: [
         {
-            description: "Get atts",
+            description: "Clear atts",
             test: ({context}) => context.sequences[0].element.subType === 'usfm:w',
             action: ({workspace}) => {
                 workspace.currentAtts = null;
@@ -113,6 +114,7 @@ const actions = {
             test: () => true,
             action: ({workspace, context}) => {
                 const element = context.sequences[0].element;
+                workspace.currentSentenceString += element.text;
                 if (
                     element.text.includes('.') ||
                     element.text.includes('?') ||
@@ -124,12 +126,14 @@ const actions = {
                                 [
                                     {
                                         source: workspace.currentSentence,
+                                        sourceString: workspace.currentSentenceString,
                                         gloss: ""
                                     }
                                 ]
                             ]
                         );
                         workspace.currentSentence = [];
+                        workspace.currentSentenceString = "";
                     }
                 } else if (
                     !element.text.includes(',') &&
