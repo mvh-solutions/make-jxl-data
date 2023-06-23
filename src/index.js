@@ -72,7 +72,13 @@ const actions = {
                     .filter(w => !w.occurrences)
                     .forEach(w => w.occurrences = workspace.occurrences[w.lemma])
                 output.sentences
-                    .map(s => s[0].source)
+                    .map( // over each sentence
+                        s => s.map( // over each sentence chunk
+                            sc => sc.map( // over each word object in a sentence chunk
+                                scw => scw.source
+                            )
+                        )
+                    )
                     .forEach(
                         s => s.filter(w => !w.occurrences)
                             .forEach(w => w.occurrences = workspace.occurrences[w.lemma])
@@ -103,7 +109,7 @@ const actions = {
     ],
     text: [
         {
-            description: "Process text",
+            description: "Process text including end of sentence detection",
             test: () => true,
             action: ({workspace, context}) => {
                 const element = context.sequences[0].element;
@@ -115,10 +121,12 @@ const actions = {
                     if (workspace.currentSentence.length > 0) {
                         output.sentences.push(
                             [
-                                {
-                                    source: workspace.currentSentence,
-                                    gloss: ""
-                                }
+                                [
+                                    {
+                                        source: workspace.currentSentence,
+                                        gloss: ""
+                                    }
+                                ]
                             ]
                         );
                         workspace.currentSentence = [];
