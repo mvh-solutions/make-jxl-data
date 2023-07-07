@@ -74,8 +74,8 @@ const actions = {
                     .forEach(w => w.occurrences = workspace.occurrences[w.lemma])
                 output.sentences
                     .map( // over each sentence
-                        s => s.map( // over each sentence chunk
-                            sc => sc.map( // over each word object in a sentence chunk
+                        s => s.chunks.map( // over each sentence chunk
+                            sc => sc.source.map( // over each word object in a sentence chunk
                                 scw => scw.source
                             )
                         )
@@ -122,15 +122,15 @@ const actions = {
                 ) {
                     if (workspace.currentSentence.length > 0) {
                         output.sentences.push(
-                            [
-                                [
+                            {
+                                chunks: [
                                     {
                                         source: workspace.currentSentence,
-                                        sourceString: workspace.currentSentenceString,
                                         gloss: ""
-                                    }
-                                ]
-                            ]
+                                    },
+                                ],
+                                sourceString: workspace.currentSentenceString,
+                            }
                         );
                         workspace.currentSentence = [];
                         workspace.currentSentenceString = "";
